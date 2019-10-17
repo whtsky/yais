@@ -12,4 +12,7 @@ jobs:
           architecture: "x64"
       - uses: dschep/install-poetry-action@v1.2
       - run: poetry install
-      - run: poetry run pytest --cov=yais
+      - run: poetry run pytest --cov=yais --cov-report xml --cov-report term-missing
+      - uses: codecov/codecov-action@v1.0.2
+        with:
+          token: ${{secrets.CODECOV_TOKEN}}
