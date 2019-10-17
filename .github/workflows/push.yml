@@ -1,0 +1,15 @@
+on: push
+name: Main workflow
+jobs:
+  pytest:
+    name: pytest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions/setup-python@v1
+        with:
+          python-version: "3.7"
+          architecture: "x64"
+      - uses: dschep/install-poetry-action@v1.2
+      - run: poetry install
+      - run: poetry run pytest --cov=yais

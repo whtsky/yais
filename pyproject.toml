@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "yais"
+version = "0.1.0"
+description = "Yet Another Image Scraper"
+authors = ["Wu Haotian <whtsky@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+repository = "https://github.com/whtsky/yais"
+
+
+[tool.poetry.dependencies]
+python = "^3.7"
+imagesize = "^1.1.0"
+requests = "^2.22.0"
+beautifulsoup4 = "^4.8.1"
+
+[tool.poetry.dev-dependencies]
+black = "^19.3b0"
+pytest = "^5.2.1"
+pytest-cov = "^2.8.1"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
+
+[tool.poetry.scripts]
+yais = "yais:cli"
