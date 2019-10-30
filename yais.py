@@ -5,6 +5,7 @@ import re
 import shutil
 from dataclasses import dataclass
 from pathlib import Path
+from typing import List
 from urllib.parse import unquote, urlparse
 
 import imagesize
@@ -12,6 +13,8 @@ import requests
 from bs4 import BeautifulSoup
 
 logger = logging.getLogger(__name__)
+
+__VERSION__ = "0.2.0"
 
 
 @dataclass
@@ -34,15 +37,17 @@ def support_prefix(prefixes):
 
 
 @support_prefix(("https://twitter.com/",))
-def get_image_data_from_twitter(url: str) -> Image:
+def get_image_data_from_twitter(url: str) -> List[Image]:
     content = requests.get(url).content
     soup = BeautifulSoup(content, features="html.parser")
-    img_url = soup.find("div", {"class": "js-adaptive-photo"})["data-image-url"]
-    return Image(
-        url=img_url + ":orig",
-        filename=os.path.basename(urlparse(img_url).path),
-        origin=url,
-    )
+    return [
+        Image(
+            url=image["data-image-url"] + ":orig",
+            filename=os.path.basename(urlparse(image["data-image-url"]).path),
+            origin=url,
+        )
+        for image in soup.find_all("div", {"class": "js-adaptive-photo"})
+    ]
 
 
 pixiv_id_re = re.compile(r"\d{7,}")
@@ -74,12 +79,23 @@ def get_image_data_from_moebooru(url: str) -> Image:
     return Image(url=img_url, filename=unquote(os.path.basename(img_url)), origin=url)
 
 
-def get_image_data(url: str) -> Image:
+@support_prefix(("https://www.zerochan.net/"))
+def get_image_data_from_zerochan(url: str) -> Image:
+    content = requests.get(url).content
+    soup = BeautifulSoup(content, features="html.parser")
+    img_url = soup.find("a", {"class": "preview"})["href"]
+    return Image(url=img_url, filename=unquote(os.path.basename(img_url)), origin=url)
+
+
+def get_image_data(url: str) -> List[Image]:
     for prefix, f in __MAPPING.items():
         if url.startswith(prefix):
-            return f(url)
+            rv = f(url)
+            if isinstance(rv, list):
+                return rv
+            return [rv]
 
-    raise Exception(f"Unsupported url: {url}")
+    raise ValueError(f"Unsupported url: {url}")
 
 
 def download_image(img: Image, path: Path) -> Path:
@@ -113,6 +129,9 @@ def cli():
     parser.add_argument(
         "-d", "--dist", default=".", help="folder to store downloaded images."
     )
+    parser.add_argument(
+        "-v", "--version", action="version", version="%(prog)s " + __VERSION__
+    )
 
     args = parser.parse_args()
 
@@ -124,12 +143,12 @@ def cli():
 
     for url in args.urls:
         logging.info("Processing %s" % url)
-        image_data = get_image_data(url)
-        logging.info("Downloading %s" % image_data.url)
-        img_path = download_image(image_data, dist)
-        logging.info("Saved to %s." % (img_path))
-        img_size = get_image_size(img_path)
-        logging.info("Image Size: %sx%s" % (img_size.width, img_size.height))
+        for image_data in get_image_data(url):
+            logging.info("Downloading %s" % image_data.url)
+            img_path = download_image(image_data, dist)
+            logging.info("Saved to %s." % (img_path))
+            img_size = get_image_size(img_path)
+            logging.info("Image Size: %sx%s" % (img_size.width, img_size.height))
         logging.info("%s Done" % url)
 
     logger.info("Finish")
