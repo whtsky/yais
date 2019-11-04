@@ -127,7 +127,7 @@ def cli():
     parser = argparse.ArgumentParser(description="Download image from url")
     parser.add_argument("urls", nargs="+")
     parser.add_argument(
-        "-d", "--dist", default=".", help="folder to store downloaded images."
+        "-d", "--dest", default=".", help="folder to store downloaded images."
     )
     parser.add_argument(
         "-v", "--version", action="version", version="%(prog)s " + __VERSION__
@@ -135,7 +135,7 @@ def cli():
 
     args = parser.parse_args()
 
-    dist = Path(args.dist)
+    dest = Path(args.dest)
 
     logging.basicConfig(
         level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
@@ -145,7 +145,7 @@ def cli():
         logging.info("Processing %s" % url)
         for image_data in get_image_data(url):
             logging.info("Downloading %s" % image_data.url)
-            img_path = download_image(image_data, dist)
+            img_path = download_image(image_data, dest)
             logging.info("Saved to %s." % (img_path))
             img_size = get_image_size(img_path)
             logging.info("Image Size: %sx%s" % (img_size.width, img_size.height))
