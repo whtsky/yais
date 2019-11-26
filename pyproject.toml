@@ -17,7 +17,7 @@ beautifulsoup4 = "^4.8.1"
 
 [tool.poetry.dev-dependencies]
 black = "^19.3b0"
-pytest = "^5.3.0"
+pytest = "^5.3.1"
 pytest-cov = "^2.8.1"
 mypy = "^0.740"
 
