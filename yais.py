@@ -9,12 +9,16 @@ from typing import List
 from urllib.parse import unquote, urlparse
 
 import imagesize
+import pkg_resources
 import requests
 from bs4 import BeautifulSoup
 
 logger = logging.getLogger(__name__)
 
-__VERSION__ = "0.2.0"
+try:
+    __version__ = pkg_resources.get_distribution("yais").version
+except pkg_resources.DistributionNotFound:
+    __version__ = "dev"
 
 
 @dataclass
@@ -53,7 +57,7 @@ def get_image_data_from_twitter(url: str) -> List[Image]:
 pixiv_id_re = re.compile(r"\d{7,}")
 
 
-@support_prefix(("https://www.pixiv.net",))
+@support_prefix(("https://www.pixiv.net", "https://pixiv.net"))
 def get_image_data_from_pixiv(url: str) -> Image:
     pixiv_id = pixiv_id_re.findall(url)[0]
     img_url = f"https://pixiv.cat/{pixiv_id}.png"
@@ -130,7 +134,7 @@ def cli():
         "-d", "--dest", default=".", help="folder to store downloaded images."
     )
     parser.add_argument(
-        "-v", "--version", action="version", version="%(prog)s " + __VERSION__
+        "-v", "--version", action="version", version="%(prog)s " + __version__
     )
 
     args = parser.parse_args()

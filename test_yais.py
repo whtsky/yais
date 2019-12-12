@@ -1,5 +1,7 @@
 from pathlib import Path
 
+import pytest
+
 from yais import Image, get_image_data, get_image_size
 
 
@@ -23,14 +25,16 @@ def test_tweet_with_multiple_images():
     assert len(rv) == 4
 
 
-def test_get_image_data_from_pixiv():
-    data = get_single_image_data(
-        "https://www.pixiv.net/member_illust.php?mode=medium&illust_id=77005971"
-    )
-    assert (
-        data.origin
-        == "https://www.pixiv.net/member_illust.php?mode=medium&illust_id=77005971"
-    )
+@pytest.mark.parametrize(
+    "url",
+    [
+        "https://www.pixiv.net/member_illust.php?mode=medium&illust_id=77005971",
+        "https://pixiv.net/member_illust.php?mode=medium&illust_id=77005971",
+    ],
+)
+def test_get_image_data_from_pixiv(url: str):
+    data = get_single_image_data(url)
+    assert data.origin == url
     assert data.url == "https://pixiv.cat/77005971.png"
     assert data.filename == "77005971_p0.jpg"
 
