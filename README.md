@@ -4,6 +4,10 @@ Yet Another Image Scraper
 
 ## Changelog
 
+### v0.2.2
+
+- Fix suppport for konachan site with http
+
 ### v0.2.1
 
 - Fix support for pixiv urls startswith `https://pixiv.net/`

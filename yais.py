@@ -72,7 +72,9 @@ def get_image_data_from_pixiv(url: str) -> Image:
 @support_prefix(
     (
         "https://konachan.net/post/show/",
+        "http://konachan.net/post/show/",
         "https://konachan.com/post/show/",
+        "http://konachan.com/post/show/",
         "https://yande.re/post/show/",
     )
 )
