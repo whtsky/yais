@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "yais"
-version = "0.2.2"
+version = "0.2.3"
 description = "Yet Another Image Scraper"
 authors = ["Wu Haotian <whtsky@gmail.com>"]
 license = "MIT"
@@ -20,6 +20,7 @@ black = "^19.3b0"
 pytest = "^5.3.2"
 pytest-cov = "^2.8.1"
 mypy = "^0.740"
+responses = "^0.10.9"
 
 [tool.poetry.scripts]
 yais = "yais:cli"

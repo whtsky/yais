@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import json
 import logging
 import os.path
 import re
@@ -69,6 +70,9 @@ def get_image_data_from_pixiv(url: str) -> Image:
     )
 
 
+_post_register_re = re.compile(rb"Post\.register\(({.+})\)")
+
+
 @support_prefix(
     (
         "https://konachan.net/post/show/",
@@ -81,7 +85,14 @@ def get_image_data_from_pixiv(url: str) -> Image:
 def get_image_data_from_moebooru(url: str) -> Image:
     content = requests.get(url).content
     soup = BeautifulSoup(content, features="html.parser")
-    img_url = soup.find("a", {"class": "highres-show"})["href"]
+    try:
+        img_url = soup.find("a", {"class": "highres-show"})["href"]
+    except TypeError:
+        post_register_match = _post_register_re.search(content)
+        if not post_register_match:
+            raise Exception(f"Can't find img_url from {url}")
+        data = json.loads(post_register_match.group(1))
+        img_url = data["file_url"]
     return Image(url=img_url, filename=unquote(os.path.basename(img_url)), origin=url)
 
 
@@ -109,8 +120,7 @@ def download_image(img: Image, path: Path) -> Path:
     if r.status_code == 200:
         img_path = path / img.filename
         with open(img_path, "wb") as f:
-            r.raw.decode_content = True
-            shutil.copyfileobj(r.raw, f)
+            f.write(r.content)
         return img_path
     else:
         raise r

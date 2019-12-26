@@ -2,7 +2,10 @@ from pathlib import Path
 
 import pytest
 
+import responses
 from yais import Image, get_image_data, get_image_size
+
+FIXTURES_DIR = Path(__file__).resolve().parent / "fixtures"
 
 
 def get_single_image_data(url) -> Image:
@@ -15,6 +18,17 @@ def get_single_image_data(url) -> Image:
 def test_tweet_with_multiple_images():
     rv = get_image_data("https://twitter.com/hunwaritoast/status/1188048064948293632")
     assert len(rv) == 4
+
+
+@responses.activate
+def test_moebooru_teapot():
+    responses.add(
+        responses.GET,
+        "https://konachan.net/post/show/296375",
+        body=open(FIXTURES_DIR / "296375.html").read(),
+    )
+    rv = get_single_image_data("https://konachan.net/post/show/296375")
+    assert rv.url == 'https://konachan.net/image/987f3116299ee612238f08c0c95a46c2/Konachan.com%20-%20296727%20aqua_eyes%20blonde_hair%20boots%20brown_eyes%20brown_hair%20forest%20gloves%20gray_hair%20group%20gun%20long_hair%20pink_hair%20ponytail%20snow%20thighhighs%20tree%20uniform%20weapon.jpg'
 
 
 @pytest.mark.parametrize(
@@ -60,7 +74,7 @@ def test_get_image_data(origin: str, url: str, filename: str):
 
 
 def test_get_image_size():
-    dc_img = Path(__file__).resolve().parent / "fixtures" / "dc.png"
+    dc_img = FIXTURES_DIR / "dc.png"
     size = get_image_size(dc_img)
     assert size.width == 512
     assert size.height == 154

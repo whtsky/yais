@@ -4,6 +4,10 @@ Yet Another Image Scraper
 
 ## Changelog
 
+### v0.2.3
+
+- Improve support for moebooru
+
 ### v0.2.2
 
 - Fix suppport for konachan site with http
