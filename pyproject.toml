@@ -13,7 +13,7 @@ repository = "https://github.com/whtsky/yais"
 python = "^3.7"
 imagesize = "^1.1.0"
 requests = "^2.22.0"
-beautifulsoup4 = "^4.8.1"
+beautifulsoup4 = "^4.8.2"
 
 [tool.poetry.dev-dependencies]
 black = "^19.3b0"
