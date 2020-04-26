@@ -20,7 +20,7 @@ black = "^19.3b0"
 pytest = "^5.3.2"
 pytest-cov = "^2.8.1"
 mypy = "^0.740"
-responses = "^0.10.9"
+responses = "^0.10.14"
 
 [tool.poetry.scripts]
 yais = "yais:cli"
