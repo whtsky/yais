@@ -1,18 +1,17 @@
 #!/usr/bin/env python3
+from dataclasses import dataclass
 import json
 import logging
 import os.path
-import re
-import shutil
-from dataclasses import dataclass
 from pathlib import Path
+import re
 from typing import List
 from urllib.parse import unquote, urlparse
 
+from bs4 import BeautifulSoup
 import imagesize
 import pkg_resources
 import requests
-from bs4 import BeautifulSoup
 
 logger = logging.getLogger(__name__)
 
@@ -41,17 +40,34 @@ def support_prefix(prefixes):
     return wrapper
 
 
+tweet_id_re = re.compile(r"status\/(\d+)")
+
 @support_prefix(("https://twitter.com/",))
 def get_image_data_from_twitter(url: str) -> List[Image]:
-    content = requests.get(url).content
-    soup = BeautifulSoup(content, features="html.parser")
+    # https://github.com/ytdl-org/youtube-dl/issues/12726#issuecomment-304779835
+    tweet_id_match = tweet_id_re.search(url)
+    if not tweet_id_match:
+        raise ValueError("Can't find tweet id")
+    tweet_id = tweet_id_match.group(1)
+
+    headers={
+        "Authorization": "Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA",
+    }
+
+    try:
+        headers['x-guest-token'] = requests.post("https://api.twitter.com/1.1/guest/activate.json", headers=headers, data=b'').json()['guest_token']
+    except:
+        logger.exception('failed to get guest token')
+        return []
+
+    data = requests.get(f"https://api.twitter.com/2/timeline/conversation/{tweet_id}.json", headers=headers).json()
     return [
         Image(
-            url=image["data-image-url"] + ":orig",
-            filename=os.path.basename(urlparse(image["data-image-url"]).path),
+            url=media['media_url_https'] + ":orig",
+            filename=os.path.basename(urlparse(media['media_url_https'],).path),
             origin=url,
         )
-        for image in soup.find_all("div", {"class": "js-adaptive-photo"})
+        for media in data['globalObjects']['tweets'][tweet_id]['extended_entities']['media']
     ]
 
 
