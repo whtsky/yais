@@ -28,7 +28,10 @@ def test_moebooru_teapot():
         body=open(FIXTURES_DIR / "296375.html").read(),
     )
     rv = get_single_image_data("https://konachan.net/post/show/296375")
-    assert rv.url == 'https://konachan.net/image/987f3116299ee612238f08c0c95a46c2/Konachan.com%20-%20296727%20aqua_eyes%20blonde_hair%20boots%20brown_eyes%20brown_hair%20forest%20gloves%20gray_hair%20group%20gun%20long_hair%20pink_hair%20ponytail%20snow%20thighhighs%20tree%20uniform%20weapon.jpg'
+    assert (
+        rv.url
+        == "https://konachan.net/image/987f3116299ee612238f08c0c95a46c2/Konachan.com%20-%20296727%20aqua_eyes%20blonde_hair%20boots%20brown_eyes%20brown_hair%20forest%20gloves%20gray_hair%20group%20gun%20long_hair%20pink_hair%20ponytail%20snow%20thighhighs%20tree%20uniform%20weapon.jpg"
+    )
 
 
 @pytest.mark.parametrize(

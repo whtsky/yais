@@ -42,6 +42,7 @@ def support_prefix(prefixes):
 
 tweet_id_re = re.compile(r"status\/(\d+)")
 
+
 @support_prefix(("https://twitter.com/",))
 def get_image_data_from_twitter(url: str) -> List[Image]:
     # https://github.com/ytdl-org/youtube-dl/issues/12726#issuecomment-304779835
@@ -50,24 +51,31 @@ def get_image_data_from_twitter(url: str) -> List[Image]:
         raise ValueError("Can't find tweet id")
     tweet_id = tweet_id_match.group(1)
 
-    headers={
+    headers = {
         "Authorization": "Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA",
     }
 
     try:
-        headers['x-guest-token'] = requests.post("https://api.twitter.com/1.1/guest/activate.json", headers=headers, data=b'').json()['guest_token']
+        headers["x-guest-token"] = requests.post(
+            "https://api.twitter.com/1.1/guest/activate.json", headers=headers, data=b""
+        ).json()["guest_token"]
     except:
-        logger.exception('failed to get guest token')
+        logger.exception("failed to get guest token")
         return []
 
-    data = requests.get(f"https://api.twitter.com/2/timeline/conversation/{tweet_id}.json", headers=headers).json()
+    data = requests.get(
+        f"https://api.twitter.com/2/timeline/conversation/{tweet_id}.json",
+        headers=headers,
+    ).json()
     return [
         Image(
-            url=media['media_url_https'] + ":orig",
-            filename=os.path.basename(urlparse(media['media_url_https'],).path),
+            url=media["media_url_https"] + ":orig",
+            filename=os.path.basename(urlparse(media["media_url_https"],).path),
             origin=url,
         )
-        for media in data['globalObjects']['tweets'][tweet_id]['extended_entities']['media']
+        for media in data["globalObjects"]["tweets"][tweet_id]["extended_entities"][
+            "media"
+        ]
     ]
 
 
