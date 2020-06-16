@@ -4,6 +4,10 @@ Yet Another Image Scraper
 
 ## Changelog
 
+### v0.2.4
+
+- Fix support for Twitter
+
 ### v0.2.3
 
 - Improve support for moebooru
