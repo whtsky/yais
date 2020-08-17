@@ -4,6 +4,10 @@ Yet Another Image Scraper
 
 ## Changelog
 
+### v0.2.5
+
+- Cache Twitter's `guest_token`
+
 ### v0.2.4
 
 - Fix support for Twitter
