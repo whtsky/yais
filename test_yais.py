@@ -9,7 +9,7 @@ FIXTURES_DIR = Path(__file__).resolve().parent / "fixtures"
 
 
 def get_single_image_data(url) -> Image:
-    rv = get_image_data(url)
+    rv = list(get_image_data(url))
     assert len(rv) == 1
     assert rv[0].origin == url
     return rv[0]
@@ -17,7 +17,7 @@ def get_single_image_data(url) -> Image:
 
 def test_tweet_with_multiple_images():
     rv = get_image_data("https://twitter.com/hunwaritoast/status/1188048064948293632")
-    assert len(rv) == 4
+    assert len(list(rv)) == 4
 
 
 @responses.activate
