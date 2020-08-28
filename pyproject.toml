@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "yais"
-version = "0.2.5"
+version = "0.2.6"
 description = "Yet Another Image Scraper"
 authors = ["Wu Haotian <whtsky@gmail.com>"]
 license = "MIT"

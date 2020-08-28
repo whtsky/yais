@@ -4,6 +4,10 @@ Yet Another Image Scraper
 
 ## Changelog
 
+### v0.2.6
+
+- Refine pixiv support
+
 ### v0.2.5
 
 - Cache Twitter's `guest_token`
