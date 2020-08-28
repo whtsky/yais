@@ -128,15 +128,17 @@ pixiv_id_re = re.compile(r"\d{7,}")
 
 
 @support_prefix(("https://www.pixiv.net", "https://pixiv.net"))
-def get_image_data_from_pixiv(url: str, cache_dir: Optional[Path]) -> Image:
+def get_image_data_from_pixiv(url: str, cache_dir: Optional[Path]) -> Iterable[Image]:
     pixiv_id = pixiv_id_re.findall(url)[0]
-    img_url = f"https://pixiv.cat/{pixiv_id}.png"
-    resp = requests.head(img_url)
-    return Image(
-        url=img_url,
-        filename=os.path.basename(urlparse(resp.headers["x-origin-url"]).path),
-        origin=url,
-    )
+    metadata = requests.get(
+        f"https://www.pixiv.net/ajax/illust/{pixiv_id}/pages"
+    ).json()
+    for page in metadata["body"]:
+        yield Image(
+            url=page["urls"]["original"],
+            filename=os.path.basename(page["urls"]["original"]),
+            origin=url,
+        )
 
 
 _post_register_re = re.compile(rb"Post\.register\(({.+})\)")
@@ -197,7 +199,7 @@ def get_image_data(
 
 
 def download_image(img: Image, path: Path) -> Path:
-    r = requests.get(img.url, stream=True)
+    r = requests.get(img.url, headers={"Referer": img.origin}, stream=True)
     if r.status_code == 200:
         img_path = path / img.filename
         with open(img_path, "wb") as f:

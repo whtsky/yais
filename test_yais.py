@@ -39,12 +39,12 @@ def test_moebooru_teapot():
     [
         [
             "https://www.pixiv.net/member_illust.php?mode=medium&illust_id=77005971",
-            "https://pixiv.cat/77005971.png",
+            "https://i.pximg.net/img-original/img/2019/09/28/18/00/27/77005971_p0.jpg",
             "77005971_p0.jpg",
         ],
         [
             "https://pixiv.net/member_illust.php?mode=medium&illust_id=77005971",
-            "https://pixiv.cat/77005971.png",
+            "https://i.pximg.net/img-original/img/2019/09/28/18/00/27/77005971_p0.jpg",
             "77005971_p0.jpg",
         ],
         [
