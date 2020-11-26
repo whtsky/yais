@@ -9,6 +9,7 @@ from appdirs import user_cache_dir
 import json
 import os
 import collections
+import cloudscraper
 
 from bs4 import BeautifulSoup
 import imagesize
@@ -130,9 +131,8 @@ pixiv_id_re = re.compile(r"\d{7,}")
 @support_prefix(("https://www.pixiv.net", "https://pixiv.net"))
 def get_image_data_from_pixiv(url: str, cache_dir: Optional[Path]) -> Iterable[Image]:
     pixiv_id = pixiv_id_re.findall(url)[0]
-    metadata = requests.get(
-        f"https://www.pixiv.net/ajax/illust/{pixiv_id}/pages"
-    ).json()
+    scraper = cloudscraper.create_scraper()
+    metadata = scraper.get(f"https://www.pixiv.net/ajax/illust/{pixiv_id}/pages").json()
     for page in metadata["body"]:
         yield Image(
             url=page["urls"]["original"],
