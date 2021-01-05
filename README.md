@@ -4,6 +4,10 @@ Yet Another Image Scraper
 
 ## Changelog
 
+### v0.2.7
+
+- Fix Twitter support
+
 ### v0.2.6
 
 - Refine pixiv support
