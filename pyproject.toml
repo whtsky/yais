@@ -19,7 +19,7 @@ cloudscraper = "^1.2.56"
 
 [tool.poetry.dev-dependencies]
 black = "^19.3b0"
-pytest = "^6.2.2"
+pytest = "^6.2.3"
 pytest-cov = "^2.11.1"
 mypy = "^0.740"
 responses = "^0.13.0"
