@@ -15,7 +15,7 @@ imagesize = "^1.2.0"
 requests = "^2.25.1"
 beautifulsoup4 = "^4.8.1"
 appdirs = "^1.4.4"
-cloudscraper = "^1.2.56"
+cloudscraper = "^1.2.58"
 
 [tool.poetry.dev-dependencies]
 black = "^19.3b0"
