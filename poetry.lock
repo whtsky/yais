@@ -308,7 +308,7 @@ requests = ">=2.0.1,<3.0.0"
 
 [[package]]
 name = "responses"
-version = "0.13.2"
+version = "0.13.3"
 description = "A utility library for mocking out the `requests` Python library."
 category = "dev"
 optional = false
@@ -390,7 +390,7 @@ testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "f0a54e4acb3fe3bcedfd9415df2b60a79d86c6d6c6d5b706cacd05fd1319285d"
+content-hash = "3c0dcceee03cf96fb56f63026d7ff8a5b65e8f1744abf27d211ed819e6332418"
 
 [metadata.files]
 appdirs = [
@@ -586,8 +586,8 @@ requests-toolbelt = [
     {file = "requests_toolbelt-0.9.1-py2.py3-none-any.whl", hash = "sha256:380606e1d10dc85c3bd47bf5a6095f815ec007be7a8b69c878507068df059e6f"},
 ]
 responses = [
-    {file = "responses-0.13.2-py2.py3-none-any.whl", hash = "sha256:75529f9bea08276cea43545dcb6129f137c299d6a12269485a753785c869e0e2"},
-    {file = "responses-0.13.2.tar.gz", hash = "sha256:0f0ab4717728d33dae8e66deea61eecc1e38f0398e35249e3963ff74cfc8d0d8"},
+    {file = "responses-0.13.3-py2.py3-none-any.whl", hash = "sha256:b54067596f331786f5ed094ff21e8d79e6a1c68ef625180a7d34808d6f36c11b"},
+    {file = "responses-0.13.3.tar.gz", hash = "sha256:18a5b88eb24143adbf2b4100f328a2f5bfa72fbdacf12d97d41f07c26c45553d"},
 ]
 six = [
     {file = "six-1.15.0-py2.py3-none-any.whl", hash = "sha256:8b74bedcbbbaca38ff6d7491d76f2b06b3592611af620f8426e82dddb04a5ced"},
