@@ -1,20 +1,27 @@
 #!/usr/bin/env python3
-from dataclasses import dataclass
-import logging
-from pathlib import Path
-import re
-from typing import Dict, Iterator, List, Optional, Union, Iterable, Callable
-from urllib.parse import unquote, urlparse
-from appdirs import user_cache_dir
-import json
-import os
 import collections
-import cloudscraper
+import json
+import logging
+import os
+import re
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Callable
+from typing import Dict
+from typing import Iterable
+from typing import Iterator
+from typing import List
+from typing import Optional
+from typing import Union
+from urllib.parse import unquote
+from urllib.parse import urlparse
 
-from bs4 import BeautifulSoup
+import cloudscraper
 import imagesize
 import pkg_resources
 import requests
+from appdirs import user_cache_dir
+from bs4 import BeautifulSoup
 
 logger = logging.getLogger(__name__)
 
@@ -71,7 +78,7 @@ _twitter_guest_token_filename = "guest_token"
 
 def read_twitter_guest_token_from_cache(cache: Path) -> Optional[str]:
     try:
-        with open(cache / _twitter_guest_token_filename, "r") as f:
+        with open(cache / _twitter_guest_token_filename) as f:
             return f.read()
     except:
         return None
@@ -101,7 +108,11 @@ def get_image_data_from_twitter(url: str, cache_dir: Optional[Path]) -> List[Ima
         return [
             Image(
                 url=media["media_url_https"] + ":orig",
-                filename=os.path.basename(urlparse(media["media_url_https"],).path),
+                filename=os.path.basename(
+                    urlparse(
+                        media["media_url_https"],
+                    ).path
+                ),
                 origin=url,
             )
             for media in data["globalObjects"]["tweets"][tweet_id]["extended_entities"][
@@ -167,7 +178,7 @@ def get_image_data_from_moebooru(url: str, cache_dir: Optional[Path]) -> Image:
     return Image(url=img_url, filename=unquote(os.path.basename(img_url)), origin=url)
 
 
-@support_prefix(("https://www.zerochan.net/"))
+@support_prefix("https://www.zerochan.net/")
 def get_image_data_from_zerochan(url: str, cache_dir: Optional[Path]) -> Image:
     content = requests.get(url).content
     soup = BeautifulSoup(content, features="html.parser")
@@ -232,7 +243,10 @@ def cli():
         "--debug", default=False, help="enable debug logging", action="store_true"
     )
     parser.add_argument(
-        "-c", "--cache", default=DEFAULT_CACHE_DIR, help="folder to store caches.",
+        "-c",
+        "--cache",
+        default=DEFAULT_CACHE_DIR,
+        help="folder to store caches.",
     )
     parser.add_argument(
         "-v", "--version", action="version", version="%(prog)s " + __version__
@@ -243,8 +257,12 @@ def cli():
     dest = Path(args.dest)
     cache = Path(args.cache)
 
-    logging.basicConfig(format="%(asctime)s - %(levelname)s - %(message)s",)
-    logger.setLevel(level=args.debug and logging.DEBUG or logging.INFO,)
+    logging.basicConfig(
+        format="%(asctime)s - %(levelname)s - %(message)s",
+    )
+    logger.setLevel(
+        level=args.debug and logging.DEBUG or logging.INFO,
+    )
 
     for url in args.urls:
         logger.info("Processing %s" % url)
@@ -253,7 +271,7 @@ def cli():
             img_path = download_image(image_data, dest)
             logger.info("Saved to %s." % (img_path))
             img_size = get_image_size(img_path)
-            logger.info("Image Size: %sx%s" % (img_size.width, img_size.height))
+            logger.info(f"Image Size: {img_size.width}x{img_size.height}")
         logger.info("%s Done" % url)
 
     logger.info("Finish")

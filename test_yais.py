@@ -1,9 +1,11 @@
 from pathlib import Path
 
 import pytest
-
 import responses
-from yais import Image, get_image_data, get_image_size
+
+from yais import get_image_data
+from yais import get_image_size
+from yais import Image
 
 FIXTURES_DIR = Path(__file__).resolve().parent / "fixtures"
 
