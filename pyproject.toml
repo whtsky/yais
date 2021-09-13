@@ -13,7 +13,7 @@ repository = "https://github.com/whtsky/yais"
 python = "^3.7"
 imagesize = "^1.2.0"
 requests = "^2.26.0"
-beautifulsoup4 = "^4.9.3"
+beautifulsoup4 = "^4.10.0"
 appdirs = "^1.4.4"
 cloudscraper = "^1.2.58"
 
