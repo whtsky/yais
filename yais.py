@@ -202,7 +202,7 @@ def get_image_data(
             if func_cache_dir and not func_cache_dir.exists():
                 func_cache_dir.mkdir(parents=True)
             rv = f(url, func_cache_dir)
-            if isinstance(rv, collections.Iterable):
+            if isinstance(rv, collections.abc.Iterable):
                 return rv
             return [rv]
 
